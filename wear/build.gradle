@@ -5,10 +5,14 @@ android {
     buildToolsVersion "25.0.0"
     defaultConfig {
         applicationId "jp.tsur.twitwear"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        dataBinding {
+            enabled = true
+        }
 
         buildConfigField "String", "TWITTER_KEY", "\"${TWITTER_KEY}\""
         buildConfigField "String", "TWITTER_SECRET", "\"${TWITTER_SECRET}\""
@@ -28,4 +32,5 @@ dependencies {
     provided 'com.google.android.wearable:wearable:2.0.0-alpha3'
     compile 'org.twitter4j:twitter4j-core:4.0.4'
     compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }
