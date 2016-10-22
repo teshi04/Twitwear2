@@ -1,7 +1,5 @@
 package jp.tsur.twitwear;
 
-import android.util.Log;
-
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
@@ -20,14 +18,13 @@ public class ListenerService extends WearableListenerService {
                 .build();
         client.connect();
         Wearable.MessageApi.addListener(client, this);
-        Log.d("ListenerService", "onCreate");
     }
-
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
         super.onMessageReceived(messageEvent);
-        String token = new String(messageEvent.getData());
-        Log.d("ListenerService", token);
+        String string = new String(messageEvent.getData());
+        String[] token = string.split(",");
+        Utils.saveAccessToken(this, token[0], token[1]);
     }
 }

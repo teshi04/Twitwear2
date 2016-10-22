@@ -9,6 +9,9 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
+
+        buildConfigField "String", "TWITTER_KEY", "\"${TWITTER_KEY}\""
+        buildConfigField "String", "TWITTER_SECRET", "\"${TWITTER_SECRET}\""
     }
     buildTypes {
         release {
@@ -23,4 +26,6 @@ dependencies {
     compile 'com.google.android.support:wearable:2.0.0-alpha3'
     compile 'com.google.android.gms:play-services-wearable:9.8.00'
     provided 'com.google.android.wearable:wearable:2.0.0-alpha3'
+    compile 'org.twitter4j:twitter4j-core:4.0.4'
+    compile 'io.reactivex:rxandroid:1.2.1'
 }
