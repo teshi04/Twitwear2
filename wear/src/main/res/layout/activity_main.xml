@@ -3,23 +3,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.wearable.view.BoxInsetLayout
+    <android.support.wearable.view.drawer.WearableDrawerLayout
+        android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:deviceIds="wear">
 
-        <android.support.wearable.view.WearableRecyclerView
-            android:id="@+id/list"
+        <android.support.wearable.view.BoxInsetLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_box="all" />
+            android:layout_height="match_parent">
 
-        <android.support.wearable.view.ProgressSpinner
-            android:id="@+id/progress"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="center" />
+            <android.support.wearable.view.WearableRecyclerView
+                android:id="@+id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_box="all" />
 
-    </android.support.wearable.view.BoxInsetLayout>
+            <android.support.wearable.view.ProgressSpinner
+                android:id="@+id/progress"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center" />
+
+        </android.support.wearable.view.BoxInsetLayout>
+
+        <android.support.wearable.view.drawer.WearableNavigationDrawer
+            android:id="@+id/navigation_drawer"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </android.support.wearable.view.drawer.WearableDrawerLayout>
 
 </layout>
