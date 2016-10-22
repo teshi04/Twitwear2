@@ -3,9 +3,11 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'https://maven.fabric.io/public' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:2.2.2'
+        classpath 'io.fabric.tools:gradle:1.21.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -15,6 +17,24 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
+    }
+
+
+    File propFile = rootProject.file("deploy.properties")
+    if (propFile.exists()) {
+        Properties props = new Properties()
+        props.load(new FileInputStream(rootProject.file("deploy.properties")))
+        props.entrySet().each {
+            project.ext.set(it.key, it.value)
+        }
+    }
+    [
+            'TWITTER_KEY',
+            'TWITTER_SECRET'
+    ].each { prop ->
+        if (!project.has(prop)) {
+            throw new InvalidUserDataException("${prop} is not present.")
+        }
     }
 }
 
