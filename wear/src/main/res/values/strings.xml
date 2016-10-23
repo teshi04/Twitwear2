@@ -5,10 +5,13 @@
     <string name="main_remote_input_label">What\'s happening？</string>
     <string name="tweet_failure">Failure</string>
     <string name="tweet_success">Success</string>
+    <string name="open_on_phone">Open on phone</string>
     <string name="tweet_label">Tweet</string>
     <string name="status_reply">Reply</string>
     <string name="status_like">Like</string>
     <string name="status_retweet">Retweet</string>
     <string name="main_home">Home</string>
     <string name="main_menu_refresh">Refresh</string>
+    <string name="login_open_on_phone">Open on phone</string>
+    <string name="login_label">Login with twitter</string>
 </resources>

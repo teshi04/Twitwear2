@@ -3,6 +3,7 @@ package jp.tsur.twitwear;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.AppCompatActivity;
 
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -39,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 TwitterSession session = Twitter.getSessionManager().getActiveSession();
                 TwitterAuthToken authToken = session.getAuthToken();
                 sendTokenToWear(authToken.token + "," + authToken.secret);
+                goToMainScreen();
             }
 
             @Override
@@ -69,6 +71,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 }
             }
         }).start();
+    }
+
+    private void goToMainScreen() {
+        Intent intent = new Intent(this, MainActivity.class);
+        TaskStackBuilder builder = TaskStackBuilder.create(this);
+        builder.addNextIntent(intent);
+        builder.startActivities();
     }
 
     @Override

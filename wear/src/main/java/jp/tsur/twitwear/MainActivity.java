@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.app.TaskStackBuilder;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.input.RemoteInputIntent;
 import android.support.wearable.view.drawer.WearableActionDrawer;
@@ -14,6 +15,7 @@ import android.view.Gravity;
 import android.view.MenuItem;
 
 import jp.tsur.twitwear.databinding.ActivityMainBinding;
+import twitter4j.auth.AccessToken;
 
 public class MainActivity extends WearableActivity implements WearableActionDrawer.OnMenuItemClickListener {
 
@@ -26,7 +28,15 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        AccessToken accessToken = Utils.loadAccessToken(this);
+        if (accessToken == null) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            TaskStackBuilder builder = TaskStackBuilder.create(this);
+            builder.addNextIntent(intent);
+            builder.startActivities();
+        }
+
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.navigationDrawer.setAdapter(new NavigationAdapter());
         binding.drawerLayout.peekDrawer(Gravity.TOP);
@@ -35,6 +45,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         binding.drawerLayout.peekDrawer(Gravity.BOTTOM);
         fragment = new HomeFragment();
 
+        // TODO: ネットないときになんとかする
         getFragmentManager().beginTransaction()
                 .replace(R.id.content_container, fragment).commit();
     }

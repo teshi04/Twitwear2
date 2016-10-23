@@ -1,5 +1,7 @@
 package jp.tsur.twitwear;
 
+import android.content.Intent;
+
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
@@ -8,7 +10,7 @@ import com.google.android.gms.wearable.WearableListenerService;
 
 public class ListenerService extends WearableListenerService {
 
-    private static final String PATH_AUTH_TOKEN = "/auth_token";
+    private static final String PATH_OPEN_APP = "/open_app";
 
     private GoogleApiClient client;
 
@@ -24,10 +26,10 @@ public class ListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        if (messageEvent.getPath().equals(PATH_AUTH_TOKEN)) {
-            String string = new String(messageEvent.getData());
-            String[] token = string.split(",");
-            Utils.saveAccessToken(this, token[0], token[1]);
+        if (messageEvent.getPath().equals(PATH_OPEN_APP)) {
+            Intent intent = new Intent(this, LoginActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
         }
     }
 }
