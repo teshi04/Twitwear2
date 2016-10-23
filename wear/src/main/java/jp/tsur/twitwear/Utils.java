@@ -3,6 +3,8 @@ package jp.tsur.twitwear;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.Date;
+
 import twitter4j.auth.AccessToken;
 
 
@@ -30,6 +32,21 @@ public class Utils {
             return new AccessToken(token, tokenSecret);
         } else {
             return null;
+        }
+    }
+
+    public static String getRelativeTime(Date date) {
+        int diff = (int) (((new Date()).getTime() - date.getTime()) / 1000);
+        if (diff < 1) {
+            return "now";
+        } else if (diff < 60) {
+            return diff + "s";
+        } else if (diff < 3600) {
+            return (diff / 60) + "m";
+        } else if (diff < 86400) {
+            return (diff / 3600) + "h";
+        } else {
+            return (diff / 86400) + "d";
         }
     }
 }

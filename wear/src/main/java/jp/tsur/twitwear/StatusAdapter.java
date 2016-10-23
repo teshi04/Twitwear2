@@ -2,6 +2,7 @@ package jp.tsur.twitwear;
 
 import android.annotation.SuppressLint;
 import android.databinding.DataBindingUtil;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.support.wearable.view.WearableRecyclerView;
 import android.view.LayoutInflater;
@@ -22,14 +23,20 @@ public class StatusAdapter extends WearableRecyclerView.Adapter<StatusAdapter.Vi
 
     private List<Status> items = new ArrayList<>();
 
-    public StatusAdapter(List<Status> items) {
-        this.items = items;
+    protected void onItemClick(@NonNull View view, @NonNull Status status) {
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(parent.getContext())
+        final ViewHolder viewHolder = new ViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_status, parent, false));
+        viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClick(viewHolder.getBinding().icon, items.get(viewHolder.getAdapterPosition()));
+            }
+        });
+        return viewHolder;
     }
 
     @SuppressLint("SetTextI18n")
@@ -48,6 +55,11 @@ public class StatusAdapter extends WearableRecyclerView.Adapter<StatusAdapter.Vi
     @Override
     public int getItemCount() {
         return items.size();
+    }
+
+    public void addAll(@NonNull List<Status> items) {
+        this.items = items;
+        notifyItemRangeInserted(0, items.size());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

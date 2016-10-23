@@ -30,6 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TweetActivity" />
+        <activity android:name=".StatusActivity" />
         <activity android:name="android.support.wearable.activity.ConfirmationActivity" />
 
         <service android:name=".ListenerService">

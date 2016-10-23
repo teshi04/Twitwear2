@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.wearable.view.drawer.WearableDrawerLayout
         android:id="@+id/drawer_layout"
@@ -17,13 +17,15 @@
         <android.support.wearable.view.drawer.WearableNavigationDrawer
             android:id="@+id/navigation_drawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/drawer_color" />
 
         <android.support.wearable.view.drawer.WearableActionDrawer
             android:id="@+id/action_drawer"
-            app:action_menu="@menu/main_action_drawer_menu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:background="@color/drawer_color"
+            app:action_menu="@menu/main_action_drawer_menu" />
 
     </android.support.wearable.view.drawer.WearableDrawerLayout>
 

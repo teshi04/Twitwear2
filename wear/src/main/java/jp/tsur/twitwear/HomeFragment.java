@@ -4,7 +4,9 @@ package jp.tsur.twitwear;
 import android.app.Fragment;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
@@ -24,6 +26,7 @@ import twitter4j.Status;
 public class HomeFragment extends Fragment {
 
     private FragmentTimelineBinding binding;
+    private StatusAdapter adapter;
     private Subscription subscription = Subscriptions.empty();
 
     @Nullable
@@ -42,6 +45,16 @@ public class HomeFragment extends Fragment {
         binding.list.hasFixedSize();
         binding.list.addItemDecoration(new DividerDecoration(getActivity()));
         binding.progress.setColors(new int[]{ContextCompat.getColor(getContext(), R.color.progress)});
+
+        adapter = new StatusAdapter() {
+            @Override
+            protected void onItemClick(@NonNull View view, @NonNull Status status) {
+                ActivityOptionsCompat options = ActivityOptionsCompat.
+                        makeSceneTransitionAnimation(getActivity(), view, "icon");
+                startActivity(StatusActivity.createIntent(getActivity(), status), options.toBundle());
+            }
+        };
+        binding.list.setAdapter(adapter);
 
         getTimeLine();
     }
@@ -63,16 +76,15 @@ public class HomeFragment extends Fragment {
 
                     @Override
                     public void onError(Throwable e) {
-                        binding.progress.setVisibility(View.GONE);
+                        binding.progress.hide();
                         e.printStackTrace();
                     }
 
                     @Override
                     public void onNext(ResponseList<Status> statuses) {
-                        binding.progress.setVisibility(View.GONE);
+                        binding.progress.hide();
                         binding.list.setVisibility(View.VISIBLE);
-                        StatusAdapter adapter = new StatusAdapter(statuses);
-                        binding.list.setAdapter(adapter);
+                        adapter.addAll(statuses);
                     }
                 });
     }

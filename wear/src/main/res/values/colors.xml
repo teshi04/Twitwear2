@@ -5,4 +5,5 @@
     <color name="progress">#64B5F6</color>
     <color name="circle_button">#2196F3</color>
     <color name="circle_button_negative">#9E9E9E</color>
+    <color name="drawer_color">#1E88E5</color>
 </resources>
