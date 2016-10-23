@@ -29,6 +29,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".TweetActivity" />
+        <activity android:name="android.support.wearable.activity.ConfirmationActivity" />
 
         <service android:name=".ListenerService">
             <intent-filter>

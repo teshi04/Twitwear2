@@ -2,12 +2,14 @@ package jp.tsur.twitwear;
 
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 
 import rx.Observable;
 import rx.Subscriber;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
+import twitter4j.StatusUpdate;
 import twitter4j.TwitterException;
 import twitter4j.TwitterFactory;
 import twitter4j.auth.AccessToken;
@@ -22,6 +24,22 @@ public class Twitter {
                     Paging paging = new Paging();
                     paging.setCount(30);
                     subscriber.onNext(getTwitterInstance(context).getHomeTimeline(paging));
+                    subscriber.onCompleted();
+                } catch (TwitterException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
+
+    public static Observable<Status> updateStatus(
+            final Context context, @NonNull final String statusText) {
+        return Observable.create(new Observable.OnSubscribe<Status>() {
+            @Override
+            public void call(Subscriber<? super Status> subscriber) {
+                try {
+                    StatusUpdate statusUpdate = new StatusUpdate(statusText);
+                    subscriber.onNext(getTwitterInstance(context).updateStatus(statusUpdate));
                     subscriber.onCompleted();
                 } catch (TwitterException e) {
                     subscriber.onError(e);

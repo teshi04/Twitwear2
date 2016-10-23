@@ -3,4 +3,6 @@
     <color name="divider">#0277BD</color>
     <color name="window_background">#01579B</color>
     <color name="progress">#64B5F6</color>
+    <color name="circle_button">#2196F3</color>
+    <color name="circle_button_negative">#9E9E9E</color>
 </resources>

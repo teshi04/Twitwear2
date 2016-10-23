@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">Twitwear</string>
     <string name="hello_world">Hello World!</string>
+    <string name="main_menu_tweet">Tweet</string>
+    <string name="main_remote_input_label">What\'s happening？</string>
+    <string name="tweet_failure">Failure</string>
+    <string name="tweet_success">Success</string>
+    <string name="tweet_label">Tweet</string>
 </resources>
