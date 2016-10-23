@@ -48,6 +48,36 @@ public class Twitter {
         });
     }
 
+    public static Observable<Status> createFavorite(
+            final Context context, final long statusId) {
+        return Observable.create(new Observable.OnSubscribe<Status>() {
+            @Override
+            public void call(Subscriber<? super Status> subscriber) {
+                try {
+                    subscriber.onNext(getTwitterInstance(context).createFavorite(statusId));
+                    subscriber.onCompleted();
+                } catch (TwitterException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
+
+    public static Observable<Status> retweetStatus(
+            final Context context, final long statusId) {
+        return Observable.create(new Observable.OnSubscribe<Status>() {
+            @Override
+            public void call(Subscriber<? super Status> subscriber) {
+                try {
+                    subscriber.onNext(getTwitterInstance(context).retweetStatus(statusId));
+                    subscriber.onCompleted();
+                } catch (TwitterException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
+
     private static twitter4j.Twitter getTwitterInstance(Context context) {
         TwitterFactory factory = new TwitterFactory();
         twitter4j.Twitter twitter = factory.getInstance();
