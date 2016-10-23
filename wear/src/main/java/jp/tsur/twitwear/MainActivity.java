@@ -1,6 +1,5 @@
 package jp.tsur.twitwear;
 
-import android.app.FragmentManager;
 import android.app.RemoteInput;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -21,19 +20,23 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
     private static final int REQUEST_REMOTE_INPUT = 0;
     private static final String KEY_REMOTE_INPUT = "remote_input";
 
+    private ActivityMainBinding binding;
+    private HomeFragment fragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.navigationDrawer.setAdapter(new NavigationAdapter());
         binding.drawerLayout.peekDrawer(Gravity.TOP);
 
         binding.actionDrawer.setOnMenuItemClickListener(this);
         binding.drawerLayout.peekDrawer(Gravity.BOTTOM);
+        fragment = new HomeFragment();
 
         getFragmentManager().beginTransaction()
-                .replace(R.id.content_container, new HomeFragment()).commit();
+                .replace(R.id.content_container, fragment).commit();
     }
 
     @Override
@@ -49,16 +52,22 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
 
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
-        if (menuItem.getItemId() == R.id.action_tweet) {
-            RemoteInput remoteInput = new RemoteInput.Builder(KEY_REMOTE_INPUT)
-                    .setLabel(getString(R.string.main_remote_input_label))
-                    .build();
-            RemoteInput[] remoteInputs = new RemoteInput[]{remoteInput};
+        int itemId = menuItem.getItemId();
+        switch (itemId) {
+            case R.id.action_tweet:
+                RemoteInput remoteInput = new RemoteInput.Builder(KEY_REMOTE_INPUT)
+                        .setLabel(getString(R.string.main_remote_input_label))
+                        .build();
+                RemoteInput[] remoteInputs = new RemoteInput[]{remoteInput};
 
-            Intent intent = new Intent(RemoteInputIntent.ACTION_REMOTE_INPUT);
-            intent.putExtra(RemoteInputIntent.EXTRA_REMOTE_INPUTS, remoteInputs);
-            startActivityForResult(intent, REQUEST_REMOTE_INPUT);
-            return true;
+                Intent intent = new Intent(RemoteInputIntent.ACTION_REMOTE_INPUT);
+                intent.putExtra(RemoteInputIntent.EXTRA_REMOTE_INPUTS, remoteInputs);
+                startActivityForResult(intent, REQUEST_REMOTE_INPUT);
+                return true;
+            case R.id.action_refresh:
+                fragment.refresh();
+                binding.drawerLayout.closeDrawer(binding.actionDrawer);
+                return true;
         }
         return false;
     }
@@ -69,9 +78,7 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
         public String getItemText(int position) {
             switch (position) {
                 case 0:
-                    return "Home";
-                case 1:
-                    return "Notification";
+                    return getString(R.string.main_home);
             }
             return null;
         }
@@ -81,29 +88,18 @@ public class MainActivity extends WearableActivity implements WearableActionDraw
             switch (position) {
                 case 0:
                     return getDrawable(R.drawable.home_vector);
-                case 1:
-                    return getDrawable(R.drawable.notification_vector);
             }
             return null;
         }
 
         @Override
         public void onItemSelected(int position) {
-            FragmentManager fragmentManager = getFragmentManager();
-            switch (position) {
-                case 0:
-                    fragmentManager.beginTransaction().replace(
-                            R.id.content_container, new HomeFragment()).commit();
-                case 1:
-                    // TODO: NotificationFragment
-                    fragmentManager.beginTransaction().replace(
-                            R.id.content_container, new HomeFragment()).commit();
-            }
+            // TODO: NotificationFragment
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 1;
         }
     }
 }

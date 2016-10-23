@@ -65,6 +65,12 @@ public class HomeFragment extends Fragment {
         subscription.unsubscribe();
     }
 
+    public void refresh() {
+        binding.progress.showWithAnimation();
+        adapter.clear();
+        getTimeLine();
+    }
+
     private void getTimeLine() {
         subscription = Twitter.getHomeTimeline(getActivity())
                 .subscribeOn(Schedulers.newThread())
@@ -83,7 +89,6 @@ public class HomeFragment extends Fragment {
                     @Override
                     public void onNext(ResponseList<Status> statuses) {
                         binding.progress.hide();
-                        binding.list.setVisibility(View.VISIBLE);
                         adapter.addAll(statuses);
                     }
                 });

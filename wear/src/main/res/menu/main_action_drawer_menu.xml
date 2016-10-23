@@ -4,4 +4,8 @@
         android:id="@+id/action_tweet"
         android:icon="@drawable/edit_vector"
         android:title="@string/main_menu_tweet" />
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/refresh_vector"
+        android:title="@string/main_menu_refresh" />
 </menu>

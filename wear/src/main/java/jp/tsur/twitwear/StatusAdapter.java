@@ -58,8 +58,15 @@ public class StatusAdapter extends WearableRecyclerView.Adapter<StatusAdapter.Vi
     }
 
     public void addAll(@NonNull List<Status> items) {
+        this.items.clear();
         this.items = items;
         notifyItemRangeInserted(0, items.size());
+    }
+
+    public void clear() {
+        int size = items.size();
+        this.items.clear();
+        notifyItemRangeRemoved(0, size);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

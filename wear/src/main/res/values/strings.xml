@@ -9,4 +9,6 @@
     <string name="status_reply">Reply</string>
     <string name="status_like">Like</string>
     <string name="status_retweet">Retweet</string>
+    <string name="main_home">Home</string>
+    <string name="main_menu_refresh">Refresh</string>
 </resources>

@@ -23,8 +23,8 @@
                 android:layout_height="40dp"
                 android:layout_marginRight="8dp"
                 android:layout_marginTop="4dp"
-                android:background="#fff"
                 android:transitionName="icon"
+                tools:background="#fff"
                 tools:ignore="ContentDescription" />
 
             <TextView
