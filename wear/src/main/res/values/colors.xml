@@ -2,4 +2,5 @@
 <resources>
     <color name="divider">#0277BD</color>
     <color name="window_background">#01579B</color>
+    <color name="progress">#64B5F6</color>
 </resources>

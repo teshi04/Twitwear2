@@ -1,74 +1,36 @@
 package jp.tsur.twitwear;
 
+import android.app.FragmentManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.wearable.activity.WearableActivity;
 import android.support.wearable.view.drawer.WearableNavigationDrawer;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
 
 import jp.tsur.twitwear.databinding.ActivityMainBinding;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.Subscriptions;
-import twitter4j.ResponseList;
-import twitter4j.Status;
 
 public class MainActivity extends WearableActivity {
 
     private Subscription subscription = Subscriptions.empty();
-    private ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
         binding.navigationDrawer.setAdapter(new NavigationAdapter());
         binding.drawerLayout.peekDrawer(Gravity.TOP);
 
-        binding.list.setLayoutManager(new LinearLayoutManager(this));
-        binding.list.hasFixedSize();
-        binding.list.addItemDecoration(new DividerDecoration(this));
-
-        getTimeLine();
+        getFragmentManager().beginTransaction().replace(R.id.content_container, new HomeFragment()).commit();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         subscription.unsubscribe();
-    }
-
-    private void getTimeLine() {
-        subscription = Twitter.getHomeTimeline(this)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ResponseList<Status>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d("MainActivity", "onCompleted");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        binding.progress.setVisibility(View.GONE);
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(ResponseList<Status> statuses) {
-                        binding.progress.setVisibility(View.GONE);
-                        binding.list.setVisibility(View.VISIBLE);
-                        StatusAdapter adapter = new StatusAdapter(statuses);
-                        binding.list.setAdapter(adapter);
-                    }
-                });
     }
 
     private class NavigationAdapter extends WearableNavigationDrawer.WearableNavigationDrawerAdapter {
@@ -97,7 +59,14 @@ public class MainActivity extends WearableActivity {
 
         @Override
         public void onItemSelected(int position) {
-
+            FragmentManager fragmentManager = getFragmentManager();
+            switch (position) {
+                case 0:
+                    fragmentManager.beginTransaction().replace(R.id.content_container, new HomeFragment()).commit();
+                case 1:
+                    // TODO: NotificationFragment
+                    fragmentManager.beginTransaction().replace(R.id.content_container, new HomeFragment()).commit();
+            }
         }
 
         @Override

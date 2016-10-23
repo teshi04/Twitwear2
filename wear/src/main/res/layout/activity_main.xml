@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.wearable.view.drawer.WearableDrawerLayout
@@ -9,23 +8,10 @@
         android:layout_height="match_parent"
         tools:deviceIds="wear">
 
-        <android.support.wearable.view.BoxInsetLayout
+        <FrameLayout
+            android:id="@+id/content_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <android.support.wearable.view.WearableRecyclerView
-                android:id="@+id/list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_box="all" />
-
-            <android.support.wearable.view.ProgressSpinner
-                android:id="@+id/progress"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_gravity="center" />
-
-        </android.support.wearable.view.BoxInsetLayout>
+            android:layout_height="match_parent" />
 
         <android.support.wearable.view.drawer.WearableNavigationDrawer
             android:id="@+id/navigation_drawer"
