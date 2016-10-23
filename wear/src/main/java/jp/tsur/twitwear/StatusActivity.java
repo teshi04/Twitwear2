@@ -1,11 +1,14 @@
 package jp.tsur.twitwear;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.wearable.activity.WearableActivity;
+import android.util.Log;
+import android.view.View;
 
 import com.squareup.picasso.Picasso;
 
@@ -24,6 +27,7 @@ public class StatusActivity extends WearableActivity {
         return intent;
     }
 
+    @SuppressLint("SetTextI18n")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ActivityStatusBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_status);
@@ -35,5 +39,12 @@ public class StatusActivity extends WearableActivity {
         binding.text.setText(status.getText());
         binding.date.setText(Utils.getRelativeTime(status.getCreatedAt()));
         Picasso.with(binding.icon.getContext()).load(user.getProfileImageURL()).fit().into(binding.icon);
+
+        binding.replyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("StatusActivity", "a");
+            }
+        });
     }
 }

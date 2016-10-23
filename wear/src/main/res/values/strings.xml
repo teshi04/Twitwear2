@@ -6,4 +6,7 @@
     <string name="tweet_failure">Failure</string>
     <string name="tweet_success">Success</string>
     <string name="tweet_label">Tweet</string>
+    <string name="status_reply">Reply</string>
+    <string name="status_like">Like</string>
+    <string name="status_retweet">Retweet</string>
 </resources>
