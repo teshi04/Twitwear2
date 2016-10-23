@@ -1,6 +1,7 @@
 package jp.tsur.twitwear;
 
 import android.annotation.SuppressLint;
+import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -8,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.wearable.activity.ConfirmationActivity;
 import android.support.wearable.activity.WearableActivity;
+import android.support.wearable.input.RemoteInputIntent;
+import android.text.TextUtils;
 import android.view.View;
 
 import com.squareup.picasso.Picasso;
@@ -24,8 +27,11 @@ import twitter4j.User;
 public class StatusActivity extends WearableActivity {
 
     private static final String EXTRA_STATUS = "status";
+    private static final int REQUEST_REMOTE_INPUT = 0;
+    private static final String KEY_REMOTE_INPUT = "remote_input";
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
+    private Status status;
 
     @NonNull
     public static Intent createIntent(@NonNull Context context, @NonNull Status status) {
@@ -39,7 +45,7 @@ public class StatusActivity extends WearableActivity {
         super.onCreate(savedInstanceState);
         ActivityStatusBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_status);
 
-        final Status status = (Status) getIntent().getSerializableExtra(EXTRA_STATUS);
+        status = (Status) getIntent().getSerializableExtra(EXTRA_STATUS);
         User user = status.getUser();
         binding.name.setText(user.getName());
         binding.screenName.setText("@" + user.getScreenName());
@@ -50,6 +56,14 @@ public class StatusActivity extends WearableActivity {
         binding.replyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                RemoteInput remoteInput = new RemoteInput.Builder(KEY_REMOTE_INPUT)
+                        .setLabel(getString(R.string.main_remote_input_label))
+                        .build();
+                RemoteInput[] remoteInputs = new RemoteInput[]{remoteInput};
+
+                Intent intent = new Intent(RemoteInputIntent.ACTION_REMOTE_INPUT);
+                intent.putExtra(RemoteInputIntent.EXTRA_REMOTE_INPUTS, remoteInputs);
+                startActivityForResult(intent, REQUEST_REMOTE_INPUT);
             }
         });
         binding.retweetButton.setOnClickListener(new View.OnClickListener() {
@@ -64,6 +78,17 @@ public class StatusActivity extends WearableActivity {
                 like(status.getId());
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_REMOTE_INPUT) {
+            Bundle results = RemoteInput.getResultsFromIntent(data);
+            String text = results.getCharSequence(KEY_REMOTE_INPUT).toString();
+            if (!TextUtils.isEmpty(text)) {
+                startActivity(TweetActivity.createIntent(this, text, status));
+            }
+        }
     }
 
     @Override

@@ -48,6 +48,23 @@ public class Twitter {
         });
     }
 
+    public static Observable<Status> updateStatus(
+            final Context context, @NonNull final String statusText, final long inReplyToStatusId) {
+        return Observable.create(new Observable.OnSubscribe<Status>() {
+            @Override
+            public void call(Subscriber<? super Status> subscriber) {
+                try {
+                    StatusUpdate statusUpdate = new StatusUpdate(statusText);
+                    statusUpdate.setInReplyToStatusId(inReplyToStatusId);
+                    subscriber.onNext(getTwitterInstance(context).updateStatus(statusUpdate));
+                    subscriber.onCompleted();
+                } catch (TwitterException e) {
+                    subscriber.onError(e);
+                }
+            }
+        });
+    }
+
     public static Observable<Status> createFavorite(
             final Context context, final long statusId) {
         return Observable.create(new Observable.OnSubscribe<Status>() {
