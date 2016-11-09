@@ -2,45 +2,52 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <RelativeLayout
+    <android.support.wearable.view.BoxInsetLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="32dp"
-            android:layout_marginTop="60dp"
-            android:text="@string/login_label"
-            android:textSize="18sp" />
-
-        <LinearLayout
-            android:id="@+id/open_phone_button"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/label"
-            android:background="?android:selectableItemBackground"
-            android:gravity="center_horizontal"
-            android:padding="8dp">
-
-            <android.support.wearable.view.CircularButton
-                android:layout_width="36dp"
-                android:layout_height="36dp"
-                android:layout_marginRight="8dp"
-                android:color="@color/circle_button"
-                android:src="@drawable/phone_vector"
-                app:imageScaleMode="fit" />
+            android:layout_height="match_parent"
+            app:layout_box="top">
 
             <TextView
+                android:id="@+id/label"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:text="@string/login_open_on_phone" />
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="16dp"
+                android:text="@string/login_label"
+                android:textSize="18sp" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:id="@+id/open_phone_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/label"
+                android:background="?android:selectableItemBackground"
+                android:gravity="center_horizontal"
+                android:padding="8dp">
 
-    </RelativeLayout>
+                <android.support.wearable.view.CircularButton
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:layout_marginRight="8dp"
+                    android:color="@color/circle_button"
+                    android:src="@drawable/phone_vector"
+                    app:imageScaleMode="fit" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical"
+                    android:text="@string/login_open_on_phone" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </android.support.wearable.view.BoxInsetLayout>
 
 </layout>
