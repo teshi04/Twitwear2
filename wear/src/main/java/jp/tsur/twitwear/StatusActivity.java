@@ -16,7 +16,7 @@ import android.view.View;
 import com.squareup.picasso.Picasso;
 
 import jp.tsur.twitwear.databinding.ActivityStatusBinding;
-import rx.Subscriber;
+import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -101,20 +101,17 @@ public class StatusActivity extends WearableActivity {
         Subscription subscription = Twitter.createFavorite(this, statusId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Status>() {
+                .subscribe(new SingleSubscriber<Status>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSuccess(Status value) {
+                        startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
+
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         startConfirmationActivity(ConfirmationActivity.FAILURE_ANIMATION,
                                 getString(R.string.tweet_failure));
-                    }
-
-                    @Override
-                    public void onNext(Status response) {
-                        startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
                     }
                 });
         subscriptions.add(subscription);
@@ -124,20 +121,16 @@ public class StatusActivity extends WearableActivity {
         Subscription subscription = Twitter.retweetStatus(this, statusId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Status>() {
+                .subscribe(new SingleSubscriber<Status>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSuccess(Status value) {
+                        startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         startConfirmationActivity(ConfirmationActivity.FAILURE_ANIMATION,
                                 getString(R.string.tweet_failure));
-                    }
-
-                    @Override
-                    public void onNext(Status response) {
-                        startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
                     }
                 });
         subscriptions.add(subscription);

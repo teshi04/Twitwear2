@@ -10,7 +10,7 @@ import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 
 import jp.tsur.twitwear.databinding.ActivityTweetBinding;
-import rx.Subscriber;
+import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -75,47 +75,21 @@ public class TweetActivity extends WearableActivity {
     }
 
     private void updateStatus(@NonNull String text, long inReplyToStatusId) {
-        if (inReplyToStatusId != 0) {
-            subscription = Twitter.updateStatus(this, text, inReplyToStatusId)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Status>() {
-                        @Override
-                        public void onCompleted() {
-                        }
+        subscription = Twitter.updateStatus(this, text, inReplyToStatusId)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new SingleSubscriber<Status>() {
+                    @Override
+                    public void onSuccess(Status value) {
+                        startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
+                    }
 
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            startConfirmationActivity(ConfirmationActivity.FAILURE_ANIMATION, getString(R.string.tweet_failure));
-                        }
-
-                        @Override
-                        public void onNext(Status status) {
-                            startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
-                        }
-                    });
-        } else {
-            subscription = Twitter.updateStatus(this, text)
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<Status>() {
-                        @Override
-                        public void onCompleted() {
-                        }
-
-                        @Override
-                        public void onError(Throwable e) {
-                            e.printStackTrace();
-                            startConfirmationActivity(ConfirmationActivity.FAILURE_ANIMATION, getString(R.string.tweet_failure));
-                        }
-
-                        @Override
-                        public void onNext(Status status) {
-                            startConfirmationActivity(ConfirmationActivity.SUCCESS_ANIMATION, getString(R.string.tweet_success));
-                        }
-                    });
-        }
+                    @Override
+                    public void onError(Throwable e) {
+                        e.printStackTrace();
+                        startConfirmationActivity(ConfirmationActivity.FAILURE_ANIMATION, getString(R.string.tweet_failure));
+                    }
+                });
     }
 
     private void startConfirmationActivity(int animationType, String message) {

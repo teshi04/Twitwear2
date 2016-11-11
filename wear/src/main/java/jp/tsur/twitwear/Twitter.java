@@ -4,8 +4,8 @@ package jp.tsur.twitwear;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import rx.Observable;
-import rx.Subscriber;
+import rx.Single;
+import rx.SingleSubscriber;
 import twitter4j.Paging;
 import twitter4j.ResponseList;
 import twitter4j.Status;
@@ -16,80 +16,68 @@ import twitter4j.auth.AccessToken;
 
 public class Twitter {
 
-    public static Observable<ResponseList<Status>> getHomeTimeline(final Context context) {
-        return Observable.create(new Observable.OnSubscribe<ResponseList<Status>>() {
+    public static Single<ResponseList<Status>> getHomeTimeline(final Context context) {
+        return Single.create(new Single.OnSubscribe<ResponseList<Status>>() {
             @Override
-            public void call(Subscriber<? super ResponseList<Status>> subscriber) {
+            public void call(SingleSubscriber<? super ResponseList<Status>> singleSubscriber) {
                 try {
                     Paging paging = new Paging();
                     paging.setCount(30);
-                    subscriber.onNext(getTwitterInstance(context).getHomeTimeline(paging));
-                    subscriber.onCompleted();
+                    singleSubscriber.onSuccess(getTwitterInstance(context).getHomeTimeline(paging));
                 } catch (TwitterException e) {
-                    subscriber.onError(e);
+                    singleSubscriber.onError(e);
                 }
             }
         });
     }
 
-    public static Observable<Status> updateStatus(
-            final Context context, @NonNull final String statusText) {
-        return Observable.create(new Observable.OnSubscribe<Status>() {
-            @Override
-            public void call(Subscriber<? super Status> subscriber) {
-                try {
-                    StatusUpdate statusUpdate = new StatusUpdate(statusText);
-                    subscriber.onNext(getTwitterInstance(context).updateStatus(statusUpdate));
-                    subscriber.onCompleted();
-                } catch (TwitterException e) {
-                    subscriber.onError(e);
-                }
-            }
-        });
-    }
-
-    public static Observable<Status> updateStatus(
+    /**
+     * @param context
+     * @param statusText
+     * @param inReplyToStatusId when not reply 0
+     * @return
+     */
+    public static Single<Status> updateStatus(
             final Context context, @NonNull final String statusText, final long inReplyToStatusId) {
-        return Observable.create(new Observable.OnSubscribe<Status>() {
+        return Single.create(new Single.OnSubscribe<Status>() {
             @Override
-            public void call(Subscriber<? super Status> subscriber) {
+            public void call(SingleSubscriber<? super Status> singleSubscriber) {
                 try {
                     StatusUpdate statusUpdate = new StatusUpdate(statusText);
-                    statusUpdate.setInReplyToStatusId(inReplyToStatusId);
-                    subscriber.onNext(getTwitterInstance(context).updateStatus(statusUpdate));
-                    subscriber.onCompleted();
+                    if (inReplyToStatusId != 0) {
+                        statusUpdate.setInReplyToStatusId(inReplyToStatusId);
+                    }
+                    singleSubscriber.onSuccess(getTwitterInstance(context).updateStatus(statusUpdate));
                 } catch (TwitterException e) {
-                    subscriber.onError(e);
+                    singleSubscriber.onError(e);
                 }
             }
         });
     }
 
-    public static Observable<Status> createFavorite(
+    public static Single<Status> createFavorite(
             final Context context, final long statusId) {
-        return Observable.create(new Observable.OnSubscribe<Status>() {
+        return Single.create(new Single.OnSubscribe<Status>() {
             @Override
-            public void call(Subscriber<? super Status> subscriber) {
+            public void call(SingleSubscriber<? super Status> singleSubscriber) {
                 try {
-                    subscriber.onNext(getTwitterInstance(context).createFavorite(statusId));
-                    subscriber.onCompleted();
+                    singleSubscriber.onSuccess(getTwitterInstance(context).createFavorite(statusId));
                 } catch (TwitterException e) {
-                    subscriber.onError(e);
+                    singleSubscriber.onError(e);
                 }
             }
         });
     }
 
-    public static Observable<Status> retweetStatus(
+    public static Single<Status> retweetStatus(
             final Context context, final long statusId) {
-        return Observable.create(new Observable.OnSubscribe<Status>() {
+        return Single.create(new Single.OnSubscribe<Status>() {
             @Override
-            public void call(Subscriber<? super Status> subscriber) {
+            public void call(SingleSubscriber<? super Status> singleSubscriber) {
                 try {
-                    subscriber.onNext(getTwitterInstance(context).retweetStatus(statusId));
-                    subscriber.onCompleted();
+                    singleSubscriber.onSuccess(getTwitterInstance(context).retweetStatus(statusId));
                 } catch (TwitterException e) {
-                    subscriber.onError(e);
+                    singleSubscriber.onError(e);
                 }
             }
         });

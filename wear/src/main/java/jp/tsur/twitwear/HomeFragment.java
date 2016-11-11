@@ -14,7 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import jp.tsur.twitwear.databinding.FragmentTimelineBinding;
-import rx.Subscriber;
+import rx.SingleSubscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -75,21 +75,17 @@ public class HomeFragment extends Fragment {
         subscription = Twitter.getHomeTimeline(getActivity())
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<ResponseList<Status>>() {
+                .subscribe(new SingleSubscriber<ResponseList<Status>>() {
                     @Override
-                    public void onCompleted() {
+                    public void onSuccess(ResponseList<Status> statuses) {
+                        binding.progress.hide();
+                        adapter.addAll(statuses);
                     }
 
                     @Override
                     public void onError(Throwable e) {
                         binding.progress.hide();
                         e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(ResponseList<Status> statuses) {
-                        binding.progress.hide();
-                        adapter.addAll(statuses);
                     }
                 });
     }
